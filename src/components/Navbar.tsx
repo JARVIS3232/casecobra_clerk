@@ -2,13 +2,13 @@ import Link from "next/link";
 import MaxWidthWrapper from "./MaxWidthWrapper";
 import { buttonVariants } from "./ui/button";
 import { ArrowRight } from "lucide-react";
-import { getKindeServerSession } from "@kinde-oss/kinde-auth-nextjs/server";
-import { SignedIn, SignedOut, SignInButton, UserButton } from "@clerk/nextjs";
+import { SignedIn, SignedOut, UserButton } from "@clerk/nextjs";
+import { currentUser } from "@clerk/nextjs/server";
 
 const Navbar = async () => {
-  const { getUser } = getKindeServerSession();
-  const user = await getUser();
-  const isAdmin = user?.email === process.env.ADMIN_EMAIL;
+  const user = await currentUser();
+  const isAdmin =
+    user?.emailAddresses[0].emailAddress === process.env.ADMIN_EMAIL;
   return (
     <nav
       className="sticky z-[100] h-14 inset-x-0 top-0 w-full border-b border-gray-200 
@@ -22,19 +22,22 @@ const Navbar = async () => {
           <div className="h-full flex items-center space-x-4">
             {user ? (
               <>
-                {/* <Link
-                  href="/sign-in"
-                  className={buttonVariants({ size: "sm", variant: "ghost" })}
-                >
-                  Sign out
-                </Link> */}
                 {isAdmin ? (
-                  <Link
-                    href="/dashboard"
-                    className={buttonVariants({ size: "sm", variant: "ghost" })}
-                  >
-                    DashBoard
-                  </Link>
+                  <div className="flex items-center justify-center">
+                    <Link
+                      href="/dashboard"
+                      className={buttonVariants({
+                        size: "lg",
+                        class: "pt-1",
+                        variant: "ghost",
+                      })}
+                    >
+                      DashBoard
+                    </Link>
+                    <SignedIn>
+                      <UserButton />
+                    </SignedIn>
+                  </div>
                 ) : null}
                 <Link
                   href="/configure/upload"
@@ -49,13 +52,6 @@ const Navbar = async () => {
               </>
             ) : (
               <>
-                {/* <Link
-                  href="/sign-up"
-                  className={buttonVariants({ size: "sm", variant: "ghost" })}
-                >
-                  Sign up
-                </Link> */}
-
                 <SignedIn>
                   <UserButton />
                 </SignedIn>
