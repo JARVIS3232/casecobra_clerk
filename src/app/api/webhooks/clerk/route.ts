@@ -2,6 +2,7 @@ import { Webhook } from "svix";
 import { headers } from "next/headers";
 import { clerkClient, WebhookEvent } from "@clerk/nextjs/server";
 import { NextResponse } from "next/server";
+import { db } from "@/db";
 
 export async function POST(req: Request) {
   // You can find this in the Clerk Dashboard -> Webhooks -> choose the webhook
@@ -52,9 +53,20 @@ export async function POST(req: Request) {
   // Get the ID and type
   const eventType = evt.type;
   if (eventType === "user.created") {
-    console.log("user created wit email : ", evt.data.email_addresses[0]);
-    // return NextResponse.json({ message: "OK", user: newUser });
+    console.log("Inside Creation : ");
+    const existingUser = await db.user.findFirst({
+      where: { id: evt.data.id },
+    });
+    if (!existingUser) {
+      const newUser = await db.user.create({
+        data: {
+          id: evt.data.id,
+          email: evt.data.email_addresses[0].email_address,
+        },
+      });
+      console.log(newUser);
+      return NextResponse.json({ message: "OK", user: newUser });
+    }
   }
-
   return new Response("", { status: 200 });
 }
