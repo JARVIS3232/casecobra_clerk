@@ -1,13 +1,12 @@
 "use server";
 
 import { db } from "@/db";
-import { getKindeServerSession } from "@kinde-oss/kinde-auth-nextjs/server";
+import { currentUser } from "@clerk/nextjs/server";
 
 export const getPaymentStatus = async ({ orderId }: { orderId: string }) => {
-  const { getUser } = getKindeServerSession();
-  const user = await getUser();
+  const user = await currentUser();
 
-  if (!user?.id || !user.email) {
+  if (!user?.id || !user.emailAddresses[0].emailAddress) {
     throw new Error("You need to be logged in to view this page.");
   }
 

@@ -17,16 +17,15 @@ import {
 } from "@/components/ui/table";
 import { db } from "@/db";
 import { formatPrice } from "@/lib/utils";
-import { getKindeServerSession } from "@kinde-oss/kinde-auth-nextjs/server";
 import { notFound } from "next/navigation";
 import StatusDropDown from "./StatusDropDown";
+import { currentUser } from "@clerk/nextjs/server";
 
 const Page = async () => {
-  const { getUser } = getKindeServerSession();
-  const user = await getUser();
+  const user = await currentUser();
 
   const admin_email = process.env.ADMIN_EMAIL;
-  if (!user || user.email !== admin_email) {
+  if (!user || user.emailAddresses[0].emailAddress !== admin_email) {
     return notFound();
   }
 

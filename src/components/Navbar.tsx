@@ -63,7 +63,7 @@ const Navbar = async () => {
                       className: "hidden sm:flex items-center gap-1",
                     })}
                   >
-                    Login
+                    Login / Sign Up
                   </Link>
                 </SignedOut>
 

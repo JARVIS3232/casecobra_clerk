@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { BASE_PRICE, PRODUCTS_PRICES } from "@/config/products";
 import { cn, formatPrice } from "@/lib/utils";
 import { COLORS, FINISHES, MODELS } from "@/validator/option-validator";
-import { Configuration } from "@prisma/client";
+import { Configuration, User } from "@prisma/client";
 import { useMutation } from "@tanstack/react-query";
 import { ArrowRight, Check } from "lucide-react";
 import { useEffect, useState } from "react";
@@ -13,14 +13,14 @@ import Confetti from "react-dom-confetti";
 import { createCheckoutSession } from "./action";
 import { useRouter } from "next/navigation";
 import { useToast } from "@/components/ui/use-toast";
-import { useKindeBrowserClient } from "@kinde-oss/kinde-auth-nextjs";
 import LoginModal from "@/components/LoginModal";
+import { useUser } from "@clerk/nextjs";
 
 const DesignPreview = ({ configuration }: { configuration: Configuration }) => {
   const router = useRouter();
+  const { user } = useUser();
   const { toast } = useToast();
   const { id } = configuration;
-  const { user } = useKindeBrowserClient();
   const [isLoginModalOpen, setIsLoginModalOpen] = useState<boolean>(false);
 
   const [showConfetti, setShowConfetti] = useState<boolean>(false);
@@ -56,7 +56,7 @@ const DesignPreview = ({ configuration }: { configuration: Configuration }) => {
       });
     },
   });
-  
+
   const handleCheckout = () => {
     if (user) {
       // create payment session

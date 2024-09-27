@@ -8,7 +8,8 @@ import {
 } from "./ui/dialog";
 import Image from "next/image";
 import { buttonVariants } from "./ui/button";
-import { LoginLink, RegisterLink } from "@kinde-oss/kinde-auth-nextjs";
+import Link from "next/link";
+import { SignedIn, SignedOut } from "@clerk/nextjs";
 
 const LoginModal = ({
   isOpen,
@@ -17,6 +18,7 @@ const LoginModal = ({
   isOpen: boolean;
   setIsOpen: Dispatch<SetStateAction<boolean>>;
 }) => {
+  const redirectUrl = process.env.NEXT_PUBLIC_SERVER_URL + "/auth-callback";
   return (
     <Dialog onOpenChange={setIsOpen} open={isOpen}>
       <DialogContent className="absolute z-[999999]">
@@ -39,13 +41,15 @@ const LoginModal = ({
             Please Login or Create an account to complete your purchase.
           </DialogDescription>
         </DialogHeader>
-        <div className="grid grid-cols-2 gap-6 divide-x divide-gray-200">
-          <LoginLink className={buttonVariants({ variant: "outline" })}>
-            Login
-          </LoginLink>
-          <RegisterLink className={buttonVariants({ variant: "default" })}>
-            Sign Up
-          </RegisterLink>
+        <div className="flex justify-center divide-x divide-gray-200">
+          <SignedOut>
+            <Link
+              href={`/sign-in?redirectUrl=${redirectUrl}`}
+              className={buttonVariants({ variant: "outline" })}
+            >
+              Login/Sign Up
+            </Link>
+          </SignedOut>
         </div>
       </DialogContent>
     </Dialog>
