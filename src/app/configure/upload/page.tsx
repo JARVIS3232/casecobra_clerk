@@ -136,7 +136,6 @@ const Page = () => {
   const [isDragOver, setIsDragOver] = useState<boolean>(false);
   const [uploadProgress, setUploadProgress] = useState<number>(0);
   const router = useRouter();
-
   const { startUpload, isUploading } = useUploadThing("imageUploader", {
     onClientUploadComplete: ([data]) => {
       const configId = data.serverData.configId;
@@ -162,9 +161,13 @@ const Page = () => {
   };
 
   const onDropAccepted = (acceptedFiles: File[]) => {
-    startUpload(acceptedFiles, { configId: undefined });
-
-    setIsDragOver(false);
+    try {
+      startUpload(acceptedFiles, { configId: undefined });
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setIsDragOver(false);
+    }
   };
 
   const [isPending, startTransition] = useTransition();

@@ -175,7 +175,6 @@ export const ourFileRouter = {
     .onUploadComplete(async ({ metadata, file }) => {
       try {
         const { configId } = metadata.input;
-
         console.log("Fetching the file from URL:", file.url);
         const res = await fetch(file.url);
         if (!res.ok) {

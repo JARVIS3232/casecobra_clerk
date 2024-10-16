@@ -38,7 +38,11 @@ const Navbar = async () => {
                       <UserButton />
                     </SignedIn>
                   </div>
-                ) : null}
+                ) : (
+                  <SignedIn>
+                    <UserButton />
+                  </SignedIn>
+                )}
                 <Link
                   href="/configure/upload"
                   className={buttonVariants({
@@ -52,9 +56,6 @@ const Navbar = async () => {
               </>
             ) : (
               <>
-                <SignedIn>
-                  <UserButton />
-                </SignedIn>
                 <SignedOut>
                   <Link
                     href="/sign-in"
