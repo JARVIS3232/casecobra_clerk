@@ -25,7 +25,7 @@ Built with the Next.js 14 App Router, Postgres, TypeScript, Tailwind & Kinde Aut
 To get started with this project, run
 
 ```bash
-  git clone https://github.com/JARVIS3232/casecobra.git
+  git clone https://github.com/JARVIS3232/casecobra_clerk.git
 ```
 
 and copy the .env.example variables into a separate .env file, fill them out & and that's all you need to get started!
